@@ -36,6 +36,7 @@
   .nextcard .meta{font-size:13px;color:var(--sub)}
   .nextcard .count{text-align:right;flex-shrink:0}
   .count .n{font-size:26px;font-weight:800;color:var(--accent);line-height:1}
+  .count .un{font-size:13px;font-weight:700;opacity:.8;margin-left:1px}
   .count .u{font-size:12px;color:var(--sub)}
   .count.zero .n{color:var(--green)}
   .sectitle{font-size:14px;font-weight:700;margin:16px 4px 10px;color:var(--ink)}
@@ -306,9 +307,16 @@ function panelToday(){
   const next = nextSession(now);
   let h = "";
   if(next){
-    const mins = Math.round((next.start - now)/60000);
-    const msgs = mins>0 ? `<div class="n">${mins}<span style="font-size:15px">分</span></div><div class="u">后开始</div>` :
-                 `<div class="n">0</div><div class="u">即将开始</div>`;
+    const mins = Math.max(0, Math.round((next.start - now)/60000));
+    let big;
+    if(mins >= 60){
+      const hh = Math.floor(mins/60), mm = mins%60;
+      big = `${hh}<span class="un">h</span>` + (mm>0 ? `${mm}<span class="un">min</span>` : "");
+    } else {
+      big = `${mins}<span class="un">min</span>`;
+    }
+    const msgs = mins>0 ? `<div class="n">${big}</div><div class="u">后开始</div>`
+                        : `<div class="n">0<span class="un">min</span></div><div class="u">即将开始</div>`;
     const nd = weekDetail(next.s, next.week);
     h += `<div class="card nextcard" onclick="showDetail(${SESSIONS.indexOf(next.s)},${next.week})"><div>
         <div class="lbl">下一节课</div><div class="name">${next.s.name}</div>
