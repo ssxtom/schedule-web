@@ -1,4 +1,4 @@
-const CACHE = "kbzs-v7";
+const CACHE = "kbzs-v8";
 const ASSETS = [
   "./",
   "./index.html",
